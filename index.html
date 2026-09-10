@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vida+ | Plataforma Interativa de Hábitos</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+   
+    :root {
+      --bg-main: #f8faf9;
+      --bg-card: #ffffff;
+      --text-primary: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      
+      --primary: #2e7d32;
+      --primary-light: #e8f5e9;
+      --primary-hover: #236326;
+      
+      --accent-blue: #0284c7;
+      --accent-blue-light: #e0f2fe;
+      
+      --accent-green: #16a34a;
+      --accent-green-light: #dcfce7;
+      
+      --accent-purple: #7c3aed;
+      --accent-purple-light: #f3e8ff;
+      
+      --accent-orange: #ea580c;
+      --accent-orange-light: #ffedd5;
+      
+      --accent-red: #dc2626;
+      
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark-mode {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-light: #14532d;
+      --accent-blue-light: #075985;
+      --accent-green-light: #14532d;
+      --accent-purple-light: #581c87;
+      --accent-orange-light: #7c2d12;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+   
+    .sidebar {
+      width: 260px;
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-left: 8px;
+    }
+
+    .brand i {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    .brand-text h2 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .nav-item button:hover {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active button {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .sidebar-footer-card {
+      background-color: var(--primary-light);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .sidebar-footer-card p {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-footer-card i {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+  
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .top-header {
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      gap: 16px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .avatar-icon {
+      width: 34px;
+      height: 34px;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .content-area {
+      padding: 32px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+  
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .icon-water { background-color: var(--accent-blue-light); color: var(--accent-blue); }
+    .icon-exercise { background-color: var(--accent-green-light); color: var(--accent-green); }
+    .icon-sleep { background-color: var(--accent-purple-light); color: var(--accent-purple); }
+    .icon-food { background-color: var(--accent-orange-light); color: var(--accent-orange); }
+
+    .card-body { flex: 1; }
+    .card-body label { font-size: 12px; color: var(--text-muted); display: block; }
+    .card-body h3 { font-size: 16px; font-weight: 700; margin: 2px 0; }
+    
+    .progress-track {
+      height: 6px;
+      background-color: var(--border-color);
+      border-radius: 3px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .fill-water { background-color: var(--accent-blue); }
+    .fill-food { background-color: var(--accent-orange); }
+
+    .card-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .dashboard-row {
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .panel-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+   
+    .habit-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .habit-item:last-child { border-bottom: none; }
+
+    .habit-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .habit-info h4 { font-size: 15px; font-weight: 600; }
+    .habit-info p { font-size: 12px; color: var(--text-muted); }
+
+    .habit-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-counter {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-counter:hover {
+      background-color: var(--border-color);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background-color: transparent;
+      color: var(--accent-red);
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-danger:hover {
+      background-color: #fef2f2;
+    }
+
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .form-group input, .form-group select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+  
+    .history-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .history-details {
+      font-size: 13px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background-color: var(--bg-card);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 450px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .app-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .dashboard-row { grid-template-columns: 1fr; }
+      .page-header { flex-direction: column; gap: 12px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-leaf"></i>
+        <div class="brand-text">
+          <h2>Vida+</h2>
+          <span>Hábitos saudáveis</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item active"><button onclick="navigate('inicio')"><i class="fa-solid fa-house"></i> Início</button></li>
+          <li class="nav-item"><button onclick="navigate('habitos')"><i class="fa-solid fa-list-check"></i> Meus Hábitos</button></li>
+          <li class="nav-item"><button onclick="navigate('metas')"><i class="fa-solid fa-bullseye"></i> Metas</button></li>
+          <li class="nav-item"><button onclick="navigate('progresso')"><i class="fa-solid fa-chart-line"></i> Progresso</button></li>
+          <li class="nav-item"><button onclick="navigate('calculadoras')"><i class="fa-solid fa-calculator"></i> Calculadoras</button></li>
+          <li class="nav-item"><button onclick="navigate('historico')"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</button></li>
+          <li class="nav-item"><button onclick="navigate('configuracoes')"><i class="fa-solid fa-gear"></i> Configurações</button></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer-card">
+      <p>Pequenas escolhas geram grandes transformações!</p>
+      <i class="fa-solid fa-seedling"></i>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="top-header">
+      <div style="font-size: 13px; font-weight: 600; color: var(--text-muted);" id="currentDateDisplay">Data Atual</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Alternar Tema"><i class="fa-regular fa-moon"></i></button>
+        <div class="user-pill" onclick="navigate('configuracoes')">
+          <div class="avatar-icon" id="avatarInitial">U</div>
+          <span id="headerUserName">Usuário</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      
+      <section id="view-inicio" class="view-section active">
+        <div class="page-header">
+          <div>
+            <h1 id="welcomeGreeting">Olá!</h1>
+            <p>Acompanhe seus hábitos e cuide da sua rotina diariamente.</p>
+          </div>
+          <button class="btn-primary" onclick="finishCurrentDay()" style="padding: 10px 18px; font-size: 14px;"><i class="fa-solid fa-calendar-check"></i> Finalizar Dia Atual</button>
+        </div>
+
+        <h3 style="margin-bottom: 14px;">Resumo do dia</h3>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="card-icon icon-water"><i class="fa-solid fa-droplet"></i></div>
+            <div class="card-body">
+              <label>Água</label>
+              <h3 id="dashWaterText">0/8 copos</h3>
+              <div class="progress-track"><div class="progress-fill fill-water" id="dashWaterBar" style="width: 0%;"></div></div>
+            </div>
+            <span class="card-badge" id="dashWaterPct">0%</span>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-icon icon-exercise"><i class="fa-solid fa-person-running"></i></div>
+            <div class="card-body">
+              <label>Exercício</label>
+              <h3 id="dashExText">0 min</h3>
+              <p id="dashExStatus" style="font-size: 11px; font-weight: bold; color: var(--accent-orange);">Não concluído</p>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-icon icon-sleep"><i class="fa-solid fa-moon"></i></div>
+            <div class="card-body">
+              <label>Sono</label>
+              <h3 id="dashSleepText">0h</h3>
+              <small id="dashSleepGoal">Meta: 8h</small>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-icon icon-food"><i class="fa-solid fa-utensils"></i></div>
+            <div class="card-body">
+              <label>Alimentação</label>
+              <h3 id="dashFoodText">0/5 refeições</h3>
+              <div class="progress-track"><div class="progress-fill fill-food" id="dashFoodBar" style="width: 0%;"></div></div>
+            </div>
+            <span class="card-badge" id="dashFoodPct">0%</span>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="panel">
+            <div class="panel-header"><h2>Ações Rápidas de Hoje</h2></div>
+            <div class="habit-item">
+              <div class="habit-info">
+                <div class="card-icon icon-water"><i class="fa-solid fa-droplet"></i></div>
+                <div><h4>Beber Água</h4><p>Adicionar copo consumido</p></div>
+              </div>
+              <button class="btn-primary" onclick="addWaterFast()">+ 1 Copo</button>
+            </div>
+            <div class="habit-item">
+              <div class="habit-info">
+                <div class="card-icon icon-exercise"><i class="fa-solid fa-person-running"></i></div>
+                <div><h4>Exercício Físico</h4><p>Registrar atividade</p></div>
+              </div>
+              <button class="btn-primary" onclick="openExerciseModal()">Registrar</button>
+            </div>
+          </div>
+
+          <div class="panel" style="text-align: center;">
+            <div class="panel-header"><h2>Sequência Atual</h2></div>
+            <div style="font-size: 48px; color: var(--accent-orange); margin: 10px 0;"><i class="fa-solid fa-fire"></i></div>
+            <h1 id="streakDisplay" style="font-size: 36px;">0</h1>
+            <p style="color: var(--text-muted); font-size: 14px;">dias seguidos cumprindo metas!</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-habitos" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Meus Hábitos</h1>
+            <p>Acompanhe seus hábitos e registre suas atividades diárias.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="habit-item">
+            <div class="habit-info">
+              <div class="card-icon icon-water"><i class="fa-solid fa-droplet"></i></div>
+              <div>
+                <h4>Beber água</h4>
+                <p>Meta: <span class="goal-water-val">8</span> copos por dia</p>
+              </div>
+            </div>
+            <div class="habit-action">
+              <button class="btn-counter" onclick="changeWater(-1)">-</button>
+              <span id="habitWaterVal" style="font-weight: 700;">0</span>
+              <button class="btn-counter" onclick="changeWater(1)">+</button>
+            </div>
+          </div>
+
+          <div class="habit-item">
+            <div class="habit-info">
+              <div class="card-icon icon-exercise"><i class="fa-solid fa-person-running"></i></div>
+              <div>
+                <h4>Exercícios físicos</h4>
+                <p>Meta: <span class="goal-ex-val">30</span> min/dia | Registrado: <span id="habitExVal">0 min</span></p>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="openExerciseModal()">Registrar exercício</button>
+          </div>
+
+          <div class="habit-item">
+            <div class="habit-info">
+              <div class="card-icon icon-sleep"><i class="fa-solid fa-moon"></i></div>
+              <div>
+                <h4>Sono</h4>
+                <p>Meta: <span class="goal-sleep-val">8</span> horas por noite</p>
+              </div>
+            </div>
+            <div class="habit-action">
+              <input type="number" id="habitSleepInput" style="width: 70px; padding: 6px;" value="0" step="0.5" onchange="updateSleepHabit(this.value)"> h
+            </div>
+          </div>
+
+          <div class="habit-item">
+            <div class="habit-info">
+              <div class="card-icon icon-food"><i class="fa-solid fa-utensils"></i></div>
+              <div>
+                <h4>Alimentação saudável</h4>
+                <p>Meta: <span class="goal-food-val">5</span> refeições/dia</p>
+              </div>
+            </div>
+            <div class="habit-action">
+              <span id="habitFoodVal" style="font-weight: 700; margin-right: 8px;">0</span>
+              <button class="btn-primary" onclick="openFoodModal()">+ Registrar refeição</button>
+            </div>
+          </div>
+
+          <div id="customHabitsContainer"></div>
+
+          <button class="btn-primary" style="margin-top: 20px; width: 100%;" onclick="openCustomHabitModal()">+ Adicionar outro hábito</button>
+        </div>
+      </section>
+
+      <section id="view-metas" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Metas</h1>
+            <p>Defina e acompanhe os objetivos que deseja alcançar.</p>
+          </div>
+        </div>
+
+        <div class="summary-grid" id="goalsListGrid"></div>
+
+        <div class="panel">
+          <div class="panel-header"><h2>+ Nova meta personalizada</h2></div>
+          <form onsubmit="createNewGoal(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nome da meta</label>
+                <input type="text" id="goalName" required placeholder="Ex: Caminhada diária">
+              </div>
+              <div class="form-group">
+                <label>Frequência</label>
+                <select id="goalFreq"><option>Diária</option><option>Semanal</option></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Valor desejado / Alvo</label>
+                <input type="number" id="goalTarget" required placeholder="Ex: 5">
+              </div>
+              <div class="form-group">
+                <label>Prazo / Data limite</label>
+                <input type="date" id="goalDeadline">
+              </div>
+            </div>
+            <button class="btn-primary" type="submit">Salvar meta</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="view-progresso" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Progresso</h1>
+            <p>Visualização gráfica do seu desempenho acumulado.</p>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-header"><h2>Evolução dos Dias Registrados</h2></div>
+          <div style="height: 250px;"><canvas id="progressChartCanvas"></canvas></div>
+        </div>
+
+        <h3>Estatísticas Gerais</h3>
+        <div class="summary-grid" style="margin-top: 12px;">
+          <div class="summary-card"><div class="card-body"><label>Conclusão Geral Média</label><h3 id="avgOverall">0%</h3></div></div>
+        </div>
+      </section>
+
+      <section id="view-calculadoras" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Calculadoras</h1>
+            <p>Ferramentas demonstrativas de apoio à saúde.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="panel">
+            <div class="panel-header"><h2>Calculadora de IMC</h2></div>
+            <div class="form-row">
+              <div class="form-group"><label>Peso (kg)</label><input type="number" id="calcWeight" value="62" step="0.1"></div>
+              <div class="form-group"><label>Altura (m)</label><input type="number" id="calcHeight" value="1.65" step="0.01"></div>
+            </div>
+            <button class="btn-primary" onclick="runIMCCalc()" style="width: 100%;">Calcular IMC</button>
+            <div id="imcOutput" style="margin-top: 16px; padding: 12px; background-color: var(--bg-main); border-radius: var(--radius-sm); display: none;">
+              <strong>Resultado: <span id="imcValText"></span></strong>
+              <p id="imcDescText" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;"></p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><h2>Duração do Sono</h2></div>
+            <div class="form-row">
+              <div class="form-group"><label>Horário de Dormir</label><input type="time" id="sleepStart" value="23:00"></div>
+              <div class="form-group"><label>Horário de Acordar</label><input type="time" id="sleepEnd" value="07:00"></div>
+            </div>
+            <button class="btn-primary" onclick="runSleepCalc()" style="width: 100%;">Calcular Horas</button>
+            <div id="sleepOutput" style="margin-top: 16px; padding: 12px; background-color: var(--bg-main); border-radius: var(--radius-sm); display: none;">
+              <strong>Duração estimada: <span id="sleepValText"></span></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-historico" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Histórico</h1>
+            <p>Consulte seus dias finalizados e registros salvos.</p>
+          </div>
+          <button class="btn-danger" onclick="clearAllHistory()">Limpar Histórico</button>
+        </div>
+
+        <div id="historyLogsContainer"></div>
+      </section>
+
+      <section id="view-configuracoes" class="view-section">
+        <div class="page-header">
+          <div>
+            <h1>Configurações</h1>
+            <p>Gerencie seu perfil e preferências.</p>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom: 20px;">
+          <div class="panel-header"><h2>Perfil do Usuário</h2></div>
+          <form onsubmit="saveProfileSettings(event)">
+            <div class="form-row">
+              <div class="form-group"><label>Nome</label><input type="text" id="cfgName" value="Usuário"></div>
+              <div class="form-group"><label>Idade</label><input type="number" id="cfgAge" value="25"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Altura (m)</label><input type="number" id="cfgHeight" value="1.65" step="0.01"></div>
+              <div class="form-group"><label>Peso (kg)</label><input type="number" id="cfgWeight" value="62" step="0.1"></div>
+            </div>
+            <button class="btn-primary" type="submit">Salvar Perfil</button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><h2>Metas Padrão Diárias</h2></div>
+          <form onsubmit="saveDefaultGoals(event)">
+            <div class="form-row">
+              <div class="form-group"><label>Meta de Água (copos)</label><input type="number" id="cfgGoalWater" value="8"></div>
+              <div class="form-group"><label>Meta de Sono (horas)</label><input type="number" id="cfgGoalSleep" value="8"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Meta de Exercício (min)</label><input type="number" id="cfgGoalEx" value="30"></div>
+              <div class="form-group"><label>Meta de Refeições</label><input type="number" id="cfgGoalFood" value="5"></div>
+            </div>
+            <button class="btn-primary" type="submit">Atualizar Metas Padrão</button>
+          </form>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <div><strong>Vida+ - Hábitos Saudáveis</strong> | Protótipo Interativo</div>
+        <div>Dados salvos localmente no navegador.</div>
+      </footer>
+
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="exerciseModal">
+    <div class="modal-box">
+      <h3>Registrar Exercício</h3>
+      <div class="form-group" style="margin-top: 14px;">
+        <label>Tipo de exercício</label>
+        <input type="text" id="exModalType" placeholder="Ex: Caminhada, Corrida">
+      </div>
+      <div class="form-group">
+        <label>Duração (minutos)</label>
+        <input type="number" id="exModalDuration" value="30">
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn-counter" onclick="closeModal('exerciseModal')" style="width: auto; padding: 0 12px;">Cancelar</button>
+        <button class="btn-primary" onclick="saveExerciseHabit()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="foodModal">
+    <div class="modal-box">
+      <h3>Registrar Refeição</h3>
+      <div class="form-group" style="margin-top: 14px;">
+        <label>Tipo da Refeição</label>
+        <select id="foodModalType">
+          <option>Café da manhã</option>
+          <option>Almoço</option>
+          <option>Lanche</option>
+          <option>Jantar</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn-counter" onclick="closeModal('foodModal')" style="width: auto; padding: 0 12px;">Cancelar</button>
+        <button class="btn-primary" onclick="saveFoodHabit()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="customHabitModal">
+    <div class="modal-box">
+      <h3>+ Adicionar Novo Hábito</h3>
+      <div class="form-group" style="margin-top: 14px;">
+        <label>Nome do hábito</label>
+        <input type="text" id="customHabitName" placeholder="Ex: Ler livro">
+      </div>
+      <div class="form-group">
+        <label>Meta e Unidade</label>
+        <input type="text" id="customHabitMeta" placeholder="Ex: 20 minutos">
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn-counter" onclick="closeModal('customHabitModal')" style="width: auto; padding: 0 12px;">Cancelar</button>
+        <button class="btn-primary" onclick="saveCustomHabit()">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultState = {
+      user: { name: 'Usuário', age: 25, height: 1.65, weight: 62 },
+      goals: { water: 8, sleep: 8, exercise: 30, food: 5 },
+      habits: { water: 0, exerciseMinutes: 0, exerciseType: '', sleep: 0, food: 0 },
+      customHabits: [],
+      customGoals: [],
+      streak: 0,
+      historyLogs: []
+    };
+
+    let state = JSON.parse(localStorage.getItem('vidaPlusState_v2')) || defaultState;
+    let chartRef = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      displayCurrentDate();
+      syncUI();
+      initChart();
+    });
+
+    function displayCurrentDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const today = new Date().toLocaleDateString('pt-BR', options);
+      document.getElementById('currentDateDisplay').innerText = today.charAt(0).toUpperCase() + today.slice(1);
+    }
+
+    function saveState() {
+      localStorage.setItem('vidaPlusState_v2', JSON.stringify(state));
+      syncUI();
+    }
+
+    function navigate(viewId) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      const targetView = document.getElementById(`view-${viewId}`);
+      if (targetView) targetView.classList.add('active');
+
+      const btn = Array.from(document.querySelectorAll('.nav-item button')).find(b => b.getAttribute('onclick').includes(viewId));
+      if (btn) btn.parentElement.classList.add('active');
+
+      if (viewId === 'progresso') {
+        updateChartData();
+      }
+    }
+
+    function syncUI() {
+      document.getElementById('headerUserName').innerText = state.user.name;
+      document.getElementById('avatarInitial').innerText = state.user.name.charAt(0).toUpperCase();
+      document.getElementById('welcomeGreeting').innerText = `Olá, ${state.user.name}! `;
+
+      document.getElementById('cfgName').value = state.user.name;
+      document.getElementById('cfgAge').value = state.user.age;
+      document.getElementById('cfgHeight').value = state.user.height;
+      document.getElementById('cfgWeight').value = state.user.weight;
+
+      document.getElementById('calcWeight').value = state.user.weight;
+      document.getElementById('calcHeight').value = state.user.height;
+
+      document.querySelectorAll('.goal-water-val').forEach(el => el.innerText = state.goals.water);
+      document.querySelectorAll('.goal-ex-val').forEach(el => el.innerText = state.goals.exercise);
+      document.querySelectorAll('.goal-sleep-val').forEach(el => el.innerText = state.goals.sleep);
+      document.querySelectorAll('.goal-food-val').forEach(el => el.innerText = state.goals.food);
+
+      document.getElementById('cfgGoalWater').value = state.goals.water;
+      document.getElementById('cfgGoalSleep').value = state.goals.sleep;
+      document.getElementById('cfgGoalEx').value = state.goals.exercise;
+      document.getElementById('cfgGoalFood').value = state.goals.food;
+
+      const waterPct = Math.round((state.habits.water / state.goals.water) * 100) || 0;
+      document.getElementById('dashWaterText').innerText = `${state.habits.water}/${state.goals.water} copos`;
+      document.getElementById('dashWaterBar').style.width = `${Math.min(100, waterPct)}%`;
+      document.getElementById('dashWaterPct').innerText = `${waterPct}%`;
+      document.getElementById('habitWaterVal').innerText = state.habits.water;
+
+      const exDone = state.habits.exerciseMinutes >= state.goals.exercise;
+      document.getElementById('dashExText').innerText = `${state.habits.exerciseMinutes} min`;
+      document.getElementById('dashExStatus').innerText = exDone ? 'Concluído' : 'Não concluído';
+      document.getElementById('dashExStatus').style.color = exDone ? 'var(--accent-green)' : 'var(--accent-orange)';
+      document.getElementById('habitExVal').innerText = state.habits.exerciseMinutes > 0 ? `${state.habits.exerciseMinutes} min (${state.habits.exerciseType || 'Exercício'})` : '0 min';
+
+      document.getElementById('dashSleepText').innerText = `${state.habits.sleep}h`;
+      document.getElementById('habitSleepInput').value = state.habits.sleep;
+
+      const foodPct = Math.round((state.habits.food / state.goals.food) * 100) || 0;
+      document.getElementById('dashFoodText').innerText = `${state.habits.food}/${state.goals.food} refeições`;
+      document.getElementById('dashFoodBar').style.width = `${Math.min(100, foodPct)}%`;
+      document.getElementById('dashFoodPct').innerText = `${foodPct}%`;
+      document.getElementById('habitFoodVal').innerText = state.habits.food;
+
+      document.getElementById('streakDisplay').innerText = state.streak;
+
+      renderCustomHabits();
+      renderGoalsList();
+      renderHistoryLogs();
+      calculateStats();
+    }
+
+    function changeWater(step) {
+      state.habits.water = Math.max(0, state.habits.water + step);
+      saveState();
+    }
+
+    function addWaterFast() { changeWater(1); }
+
+    function updateSleepHabit(val) {
+      const p = parseFloat(val);
+      if (!isNaN(p)) {
+        state.habits.sleep = Math.max(0, p);
+        saveState();
+      }
+    }
+
+    function openExerciseModal() { document.getElementById('exerciseModal').classList.add('active'); }
+    function openFoodModal() { document.getElementById('foodModal').classList.add('active'); }
+    function openCustomHabitModal() { document.getElementById('customHabitModal').classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function saveExerciseHabit() {
+      const type = document.getElementById('exModalType').value || 'Exercício';
+      const dur = parseInt(document.getElementById('exModalDuration').value) || 0;
+      state.habits.exerciseMinutes += dur;
+      state.habits.exerciseType = type;
+      closeModal('exerciseModal');
+      saveState();
+    }
+
+    function saveFoodHabit() {
+      state.habits.food = Math.min(state.goals.food, state.habits.food + 1);
+      closeModal('foodModal');
+      saveState();
+    }
+
+    function saveCustomHabit() {
+      const name = document.getElementById('customHabitName').value;
+      const meta = document.getElementById('customHabitMeta').value;
+      if (name) {
+        state.customHabits.push({ id: Date.now(), name, meta, done: false });
+        document.getElementById('customHabitName').value = '';
+        document.getElementById('customHabitMeta').value = '';
+        closeModal('customHabitModal');
+        saveState();
+      }
+    }
+
+    function toggleCustomHabit(id) {
+      const item = state.customHabits.find(h => h.id === id);
+      if (item) {
+        item.done = !item.done;
+        saveState();
+      }
+    }
+
+    function deleteCustomHabit(id) {
+      state.customHabits = state.customHabits.filter(h => h.id !== id);
+      saveState();
+    }
+
+    function renderCustomHabits() {
+      const container = document.getElementById('customHabitsContainer');
+      container.innerHTML = '';
+      state.customHabits.forEach(h => {
+        container.innerHTML += `
+          <div class="habit-item">
+            <div class="habit-info">
+              <div class="card-icon icon-exercise"><i class="fa-solid fa-star"></i></div>
+              <div>
+                <h4>${h.name}</h4>
+                <p>Meta: ${h.meta}</p>
+              </div>
+            </div>
+            <div class="habit-action">
+              <button class="btn-primary" style="background-color:${h.done ? 'var(--accent-green)' : 'var(--text-muted)'}" onclick="toggleCustomHabit(${h.id})">
+                ${h.done ? '<i class="fa-solid fa-check"></i> Feito' : 'Marcar Feito'}
+              </button>
+              <button class="btn-danger" onclick="deleteCustomHabit(${h.id})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function finishCurrentDay() {
+      const dateStr = new Date().toLocaleDateString('pt-BR');
+      
+      const waterPct = Math.min(100, (state.habits.water / state.goals.water) * 100);
+      const exPct = Math.min(100, (state.habits.exerciseMinutes / state.goals.exercise) * 100);
+      const sleepPct = Math.min(100, (state.habits.sleep / state.goals.sleep) * 100);
+      const foodPct = Math.min(100, (state.habits.food / state.goals.food) * 100);
+      
+      const overallAvg = Math.round((waterPct + exPct + sleepPct + foodPct) / 4);
+
+      if (overallAvg >= 60) {
+        state.streak += 1;
+      } else {
+        state.streak = 0;
+      }
+
+      const log = {
+        date: dateStr,
+        overall: overallAvg,
+        water: `${state.habits.water}/${state.goals.water} copos`,
+        exercise: `${state.habits.exerciseMinutes} min`,
+        sleep: `${state.habits.sleep}h`,
+        food: `${state.habits.food}/${state.goals.food} refeições`
+      };
+
+      state.historyLogs.unshift(log);
+
+      state.habits.water = 0;
+      state.habits.exerciseMinutes = 0;
+      state.habits.exerciseType = '';
+      state.habits.sleep = 0;
+      state.habits.food = 0;
+      state.customHabits.forEach(h => h.done = false);
+
+      saveState();
+      alert(`Dia ${dateStr} finalizado! Progresso global: ${overallAvg}%. O histórico foi atualizado.`);
+    }
+
+    function renderGoalsList() {
+      const grid = document.getElementById('goalsListGrid');
+      let html = `
+        <div class="summary-card">
+          <div class="card-body">
+            <label>Meta de Água</label>
+            <h3>${state.goals.water} copos/dia</h3>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-body">
+            <label>Meta de Exercício</label>
+            <h3>${state.goals.exercise} min/dia</h3>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-body">
+            <label>Meta de Sono</label>
+            <h3>${state.goals.sleep} horas/noite</h3>
+          </div>
+        </div>
+      `;
+
+      state.customGoals.forEach((g, idx) => {
+        html += `
+          <div class="summary-card">
+            <div class="card-body">
+              <label>${g.name} (${g.freq})</label>
+              <h3>Alvo: ${g.target}</h3>
+            </div>
+            <button class="btn-danger" onclick="deleteCustomGoal(${idx})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+
+    function createNewGoal(e) {
+      e.preventDefault();
+      const name = document.getElementById('goalName').value;
+      const target = document.getElementById('goalTarget').value;
+      const freq = document.getElementById('goalFreq').value;
+      const deadline = document.getElementById('goalDeadline').value;
+
+      if (name && target) {
+        state.customGoals.push({ name, target, freq, deadline });
+        document.getElementById('goalName').value = '';
+        document.getElementById('goalTarget').value = '';
+        saveState();
+      }
+    }
+
+    function deleteCustomGoal(idx) {
+      state.customGoals.splice(idx, 1);
+      saveState();
+    }
+
+    function runIMCCalc() {
+      const w = parseFloat(document.getElementById('calcWeight').value);
+      const h = parseFloat(document.getElementById('calcHeight').value);
+      if (w > 0 && h > 0) {
+        const imc = (w / (h * h)).toFixed(1);
+        document.getElementById('imcValText').innerText = imc;
+        document.getElementById('imcDescText').innerText = imc < 18.5 ? 'Abaixo do peso' : (imc <= 24.9 ? 'Peso normal' : 'Sobrepeso');
+        document.getElementById('imcOutput').style.display = 'block';
+      }
+    }
+
+    function runSleepCalc() {
+      const start = document.getElementById('sleepStart').value;
+      const end = document.getElementById('sleepEnd').value;
+      if (start && end) {
+        let [sH, sM] = start.split(':').map(Number);
+        let [eH, eM] = end.split(':').map(Number);
+        let duration = (eH + eM/60) - (sH + sM/60);
+        if (duration < 0) duration += 24;
+        document.getElementById('sleepValText').innerText = `${duration.toFixed(1)} horas`;
+        document.getElementById('sleepOutput').style.display = 'block';
+      }
+    }
+
+    function renderHistoryLogs() {
+      const container = document.getElementById('historyLogsContainer');
+      if (state.historyLogs.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:14px;">Nenhum dia finalizado ainda.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      state.historyLogs.forEach(log => {
+        container.innerHTML += `
+          <div class="history-card">
+            <div class="history-header">
+              <span>Data: ${log.date}</span>
+              <span style="color:var(--primary)">Progresso: ${log.overall}%</span>
+            </div>
+            <div class="history-details">
+              <p>💧 <strong>Água:</strong> ${log.water} | 🏃 <strong>Exercício:</strong> ${log.exercise} | 🌙 <strong>Sono:</strong> ${log.sleep} | 🍽️ <strong>Alimentação:</strong> ${log.food}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function clearAllHistory() {
+      if (confirm('Tem certeza que deseja apagar todo o seu histórico?')) {
+        state.historyLogs = [];
+        saveState();
+      }
+    }
+
+    function calculateStats() {
+      if (state.historyLogs.length === 0) return;
+      let totalOverall = 0;
+      state.historyLogs.forEach(l => totalOverall += l.overall);
+      const avg = Math.round(totalOverall / state.historyLogs.length);
+      document.getElementById('avgOverall').innerText = `${avg}%`;
+    }
+
+    function saveProfileSettings(e) {
+      e.preventDefault();
+      state.user.name = document.getElementById('cfgName').value;
+      state.user.age = document.getElementById('cfgAge').value;
+      state.user.height = document.getElementById('cfgHeight').value;
+      state.user.weight = document.getElementById('cfgWeight').value;
+      saveState();
+      alert('Perfil salvo!');
+    }
+
+    function saveDefaultGoals(e) {
+      e.preventDefault();
+      state.goals.water = parseInt(document.getElementById('cfgGoalWater').value) || 8;
+      state.goals.sleep = parseFloat(document.getElementById('cfgGoalSleep').value) || 8;
+      state.goals.exercise = parseInt(document.getElementById('cfgGoalEx').value) || 30;
+      state.goals.food = parseInt(document.getElementById('cfgGoalFood').value) || 5;
+      saveState();
+      alert('Metas salvas!');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('progressChartCanvas').getContext('2d');
+      chartRef = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Nenhum registro'],
+          datasets: [{
+            label: 'Progresso do Dia (%)',
+            data: [0],
+            borderColor: '#2e7d32',
+            backgroundColor: 'rgba(46, 125, 50, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { min: 0, max: 100 } }
+        }
+      });
+      updateChartData();
+    }
+
+    function updateChartData() {
+      if (!chartRef) return;
+      if (state.historyLogs.length === 0) {
+        chartRef.data.labels = ['Sem dados'];
+        chartRef.data.datasets[0].data = [0];
+      } else {
+        const recent = state.historyLogs.slice(0, 7).reverse();
+        chartRef.data.labels = recent.map(l => l.date);
+        chartRef.data.datasets[0].data = recent.map(l => l.overall);
+      }
+      chartRef.update();
+    }
+  </script>
+</body>
+</html>
